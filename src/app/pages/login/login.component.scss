@@ -40,3 +40,12 @@
       font-size: 16px;
     }
   }
+
+  .mat-mdc-button-touch-target{
+    background-color: rgb(7, 97, 82);
+  }
+  
+  ::ng-deep .login-form .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    stroke: red;
+  }
+  

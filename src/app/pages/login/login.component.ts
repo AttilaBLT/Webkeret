@@ -38,7 +38,7 @@ export class LoginComponent {
   login() {
     this.loginError = '';
     
-    if (this.email.value === 'test@gmail.com' && this.password.value === 'testpw') {
+    if (this.email.value === 'teszt@teszt.com' && this.password.value === 'teszt1234') {
       this.isLoading = true;
       this.showLoginForm = false;
       
@@ -46,7 +46,7 @@ export class LoginComponent {
       
       window.location.href = "/home";
     } else {
-      this.loginError = 'Invalid email or password!';
+      this.loginError = 'Nem megfelelő email vagy jelszó';
     }
   }
 }

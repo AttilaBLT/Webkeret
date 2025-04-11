@@ -1,15 +1,7 @@
 <div class="profile-container">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>User Profile</mat-card-title>
-        <mat-form-field appearance="outline">
-          <mat-label>Select Profile</mat-label>
-          <mat-select [value]="selectedIndex" (selectionChange)="reload($event.value)">
-            @for (profile of ProfileObject; track $index) {
-              <mat-option [value]="$index">{{profile.id}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <mat-card-title>Üdvözöllek!</mat-card-title>
       </mat-card-header>
   
       <mat-card-content>

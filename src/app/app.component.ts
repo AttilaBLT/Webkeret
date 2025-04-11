@@ -6,6 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { AppointmentService } from './services/appointment.service';
+import { AppointmentComponent } from './pages/appointment/appointment.component';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +19,10 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     MatIconModule,
     RouterLink,
-    MenuComponent
+    MenuComponent,
+    AppointmentComponent
   ],
+  providers: [AppointmentService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

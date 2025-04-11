@@ -1,4 +1,55 @@
-<div class="container">
-    <h2 style="text-align: center;">Időpontfoglalás</h2>      
-
-</div>
+<mat-card class="appointment-card">
+    <mat-card-header>
+      <mat-card-title>Időpont foglalás</mat-card-title>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Válassza ki a dátumot</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" required />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Válassza ki a telefon márkáját</mat-label>
+            <mat-select formControlName="brand" required>
+              <mat-option *ngFor="let brand of phoneBrands" [value]="brand">
+                {{ brand }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Válassza ki a telefon modelljét</mat-label>
+            <mat-select formControlName="model" [disabled]="!appointmentForm.get('brand')?.value" required >
+              <mat-option *ngFor="let device of filteredModels" [value]="device.id">
+                {{ device.model }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Válassza ki a szervíz típusát</mat-label>
+            <mat-select formControlName="serviceId" required>
+              <mat-option *ngFor="let service of serviceTypes" [value]="service.id">
+                {{ service.name }} - {{ service.price | priceFormat }} ({{ service.duration | timeFormat }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <button mat-raised-button color="primary" [disabled]="appointmentForm.invalid">Időpont lefoglalása</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

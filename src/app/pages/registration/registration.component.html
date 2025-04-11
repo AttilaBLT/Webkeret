@@ -1,1 +1,48 @@
-<p>registration works!</p>
+<div class="registration-container">
+    @if (isLoading) {
+        <div class="loading-container">
+          <h2>Bejelentkezés folyamatban</h2>
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+    }
+    <h1>Regisztráció</h1>
+  
+    <form [formGroup]="registrationForm" (ngSubmit)="register()" class="registration-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Név</mat-label>
+        <input matInput formControlName="name">
+        <mat-icon matSuffix>badge</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email">
+        <mat-icon matSuffix>mail</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Telefonszám</mat-label>
+        <input matInput formControlName="phone">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Szerepkör</mat-label>
+        <mat-select formControlName="role">
+          <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+        </mat-select>
+        <mat-icon matSuffix>admin_panel_settings</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Jelszó</mat-label>
+        <input matInput type="password" formControlName="password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+      <br>
+      <button mat-flat-button color="primary" type="submit" [disabled]="registrationForm.invalid">
+        Regisztráció
+      </button>
+    </form>
+  </div>
+  
