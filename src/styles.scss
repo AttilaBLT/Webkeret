@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+$bgcolor: rgb(0, 66, 55);
+
+html{
+    background-color: $bgcolor;
+}
