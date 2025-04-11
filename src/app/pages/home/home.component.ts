@@ -13,6 +13,6 @@ export class HomeComponent {
   }
 
   changePage() {
-    this.router.navigateByUrl("/tasks");
+    this.router.navigateByUrl("/appointment");
   }
 }
