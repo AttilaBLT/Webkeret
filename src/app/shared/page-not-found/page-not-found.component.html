@@ -1,4 +1,13 @@
-<div class="container">
-    <h1>Nem található ez az oldal...</h1>
-    <button [routerLink]="['/home']" routerLinkActive="active" >Vissza a kezdő oldalra</button>
-</div>
+<div class="not-found-container">
+    <mat-card class="not-found-card">
+      <mat-card-content>
+        <div class="not-found-content">
+          <mat-icon class="not-found-icon">error_outline</mat-icon>
+          <h1>Az oldal nem található!</h1>
+          <button mat-raised-button color="primary" [routerLink]="['/home']" routerLinkActive="active">
+            <mat-icon>arrow_back</mat-icon> <p>Vissza a kezdő oldalra</p>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
