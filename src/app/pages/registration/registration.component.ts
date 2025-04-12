@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { UserRole, User } from '../../interfaces/user.interface';
+import { userRole, User } from '../../interfaces/user.interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
@@ -32,7 +32,7 @@ export class RegistrationComponent {
   isLoading: boolean = false;
   showRegistrationForm: boolean = true;
   registrationForm: FormGroup;
-  roles: UserRole[] = ['admin', 'user'];
+  roles: userRole[] = ['admin', 'user'];
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.registrationForm = this.fb.group({

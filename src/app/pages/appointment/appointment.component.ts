@@ -10,6 +10,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatTimepickerModule} from '@angular/material/timepicker';
 import {MatInput} from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,6 +30,7 @@ import { CommonModule } from '@angular/common';
     MatCardModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatTimepickerModule,
     MatInput,
     ReactiveFormsModule,
     MatButtonModule,
@@ -55,6 +57,7 @@ export class AppointmentComponent implements OnInit {
   ) { 
     this.appointmentForm = this.fb.group({
       date: ['', Validators.required],
+      time: ['', Validators.required],
       brand: ['', Validators.required],
       model: ['', Validators.required],
       serviceId: ['', Validators.required]
@@ -70,6 +73,7 @@ export class AppointmentComponent implements OnInit {
   initializeForm() {
     this.appointmentForm = this.fb.group({
       date: ['', Validators.required],
+      time: ['', Validators.required],
       brand: ['', Validators.required],
       model: [{ value: '', disabled: true }, Validators.required],
       serviceId: ['', Validators.required]
@@ -104,8 +108,9 @@ export class AppointmentComponent implements OnInit {
 
   loadServiceTypes() {
     this.serviceTypes = [
-      { id: 1, name: 'Screen Replacement', price: 50000, duration: 120 },
-      { id: 2, name: 'Battery Replacement', price: 15000, duration: 60 }
+      { id: 1, name: 'Kijelző csere', price: 50000, duration: 120 },
+      { id: 2, name: 'Akkumulátor csere (utángyártott)', price: 15000, duration: 60 },
+      { id: 3, name: 'Akkumulátor csere (gyári)', price: 20000, duration: 60 }
     ];
   }
 
@@ -121,16 +126,26 @@ export class AppointmentComponent implements OnInit {
       return;
     }
 
+    const selectedDate: Date = new Date(this.appointmentForm.value.date);
+    const timeValue: Date = this.appointmentForm.value.time;
+
+    if (!(timeValue instanceof Date)) {
+      console.error('Hibás időformátum:', timeValue);
+      return;
+    }
+  
+    selectedDate.setHours(timeValue.getHours(), timeValue.getMinutes());
+
     const appointment: Appointment = {
       id: Math.random(),
       userId: 1,
       deviceId: this.appointmentForm.value.model,
       serviceId: this.appointmentForm.value.serviceId,
-      date: this.appointmentForm.value.date,
+      date: selectedDate.toLocaleString('hu-HU'),
       status: 'pending'
     };
 
-    console.log('Appointment Data:', appointment);
-    alert('Appointment created successfully!');
+    console.log('Időpont foglalás adatai:', appointment);
+    alert('Időpontfoglalás sikeresen megtörtént!');
   }
 }

@@ -1,11 +1,9 @@
 export const ProfileObject = [
   {
-    'id': '0.8106866233299395',
-    'user_name': 'John Doe',
-    'user_url': 'https://unsplash.com/@johndoe?utm_source=unsample',
-    'photo_url': 'https://unsplash.com/photos/OQyRttOV418?utm_source=unsample',
-    'email': 'john.doe@example.com',
-    'avatar': 'J',
+    'id': '1',
+    'user_name': 'Teszt felhasználó',
+    'email': 'teszt@teszt.com',
+    'avatar': 'T',
     'tasks': {
       'total': 10,
       'completed': 8,

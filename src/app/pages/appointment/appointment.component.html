@@ -9,9 +9,18 @@
         <div class="form-group">
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Válassza ki a dátumot</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date" required />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput [matDatepicker]="datePicker" formControlName="date" required />
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Válassza ki az időpontot</mat-label>
+            <input matInput [matTimepicker]="picker" formControlName="time" required />
+            <mat-timepicker-toggle matSuffix [for]="picker"></mat-timepicker-toggle>
+            <mat-timepicker #picker></mat-timepicker>
           </mat-form-field>
         </div>
   
