@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { AppointmentService } from './services/appointment.service';
-import { AppointmentComponent } from './pages/appointment/appointment.component';
+import { User } from './interfaces/user.interface';
 
 @Component({
   selector: 'app-root',
@@ -18,16 +18,15 @@ import { AppointmentComponent } from './pages/appointment/appointment.component'
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink,
     MenuComponent,
-    AppointmentComponent
+    RouterLink
   ],
   providers: [AppointmentService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'learnflow';
+  title = 'Időpontfoglaló';
   isLoggedIn = false;
 
   constructor() {}
@@ -43,7 +42,7 @@ export class AppComponent implements OnInit {
   logout(): void {
     localStorage.setItem('isLoggedIn', 'false');
     this.isLoggedIn = false;
-    window.location.href = '/home';
+    window.location.href = '/login';
   }
 
   onToggleSidenav(sidenav: MatSidenav){

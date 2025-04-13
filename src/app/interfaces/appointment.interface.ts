@@ -4,6 +4,6 @@ export interface Appointment {
     deviceId: number;
     serviceId: number;
     date: string;
-    status: 'pending' | 'confirmed' | 'cancelled';
+    status: 'folyamatban' | 'befejezve';
   }
   

@@ -9,6 +9,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
     },
 
+    { 
+        path: 'add-service-type',title: "Szervíz lehetőség hozzáadása",
+        loadComponent: () => import('./pages/add-service-type/add-service-type.component').then(m => m.AddServiceTypeComponent),
+    },
+
     {
         path: 'appointment', title: "Időpontfoglalás", 
         loadComponent: () => import('./pages/appointment/appointment.component').then(m => m.AppointmentComponent),
@@ -31,7 +36,7 @@ export const routes: Routes = [
 
     { 
         path: '',
-        redirectTo: 'home', 
+        redirectTo: 'login', 
         pathMatch: 'full'
     },
 

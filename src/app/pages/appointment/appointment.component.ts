@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../../services/appointment.service';
 import { DeviceService } from '../../services/device.service';
@@ -19,6 +19,8 @@ import { TimeFormatPipe } from '../../pipes/time/time-format.pipe';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
@@ -38,22 +40,29 @@ import { CommonModule } from '@angular/common';
     TimeFormatPipe,
     MatNativeDateModule,
     MatOptionModule,
-    CommonModule
+    CommonModule,
+    HttpClientModule,
   ]
 })
 export class AppointmentComponent implements OnInit {
+  @Output() appointmentsEvent = new EventEmitter<Appointment>();
+
   appointmentForm: FormGroup;
   devices: Device[] = [];
   serviceTypes: ServiceType[] = [];
-  phoneBrands: string[] = ['iPhone', 'Samsung'];
+  appointments: Appointment[] = [];
+  phoneBrands: string[] = [];
   filteredModels: Device[] = [];
-  selectedBrand: string = '';
+  loggedInUserId: number = 0;
+  selectedBrand: string | null = null;
+  availableTimes: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private deviceService: DeviceService,
-    private serviceTypeService: ServiceTypeService
+    private serviceTypeService: ServiceTypeService,
+    private http: HttpClient
   ) { 
     this.appointmentForm = this.fb.group({
       date: ['', Validators.required],
@@ -65,12 +74,12 @@ export class AppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loggedInUserId = Number(localStorage.getItem('loggedInUserId'));
     this.initializeForm();
-    this.loadDevices();
-    this.loadServiceTypes();
+    this.loadData();
   }
 
-  initializeForm() {
+  initializeForm(): void {
     this.appointmentForm = this.fb.group({
       date: ['', Validators.required],
       time: ['', Validators.required],
@@ -93,25 +102,18 @@ export class AppointmentComponent implements OnInit {
     });
   }
 
-  loadDevices() {
-    this.devices = [
-      { id: 1, type: 'Phone', brand: 'iPhone', model: '15', userId: 1 },
-      { id: 2, type: 'Phone', brand: 'iPhone', model: '14', userId: 1 },
-      { id: 3, type: 'Phone', brand: 'iPhone', model: '13', userId: 1 },
-      { id: 4, type: 'Phone', brand: 'iPhone', model: '12', userId: 1 },
-      { id: 5, type: 'Phone', brand: 'Samsung', model: 'Galaxy S21', userId: 1 },
-      { id: 6, type: 'Phone', brand: 'Samsung', model: 'Galaxy Note 20', userId: 1 },
-    ];
-
-    this.filteredModels = this.devices;
-  }
-
-  loadServiceTypes() {
-    this.serviceTypes = [
-      { id: 1, name: 'Kijelző csere', price: 50000, duration: 120 },
-      { id: 2, name: 'Akkumulátor csere (utángyártott)', price: 15000, duration: 60 },
-      { id: 3, name: 'Akkumulátor csere (gyári)', price: 20000, duration: 60 }
-    ];
+  loadData(): void {
+    this.http.get<any>('assets/dummy-data.json').subscribe({
+      next: (data) => {
+        this.devices = data.devices;
+        this.serviceTypes = data.serviceTypes;
+        this.appointments = data.appointments;
+        this.phoneBrands = [...new Set(this.devices.map((device) => device.brand))];
+      },
+      error: (err) => {
+        console.error('Hiba az adatok betöltésekor:', err);
+      }
+    });
   }
 
   filterModelsByBrand(brand: string) {
@@ -121,31 +123,48 @@ export class AppointmentComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onBrandChange(event: any): void {
+    const selectedBrand = event.value;
+    this.selectedBrand = selectedBrand;
+    this.filteredModels = this.devices.filter((device) => device.brand === selectedBrand);
+
+    const modelControl = this.appointmentForm.get('model');
+    if (selectedBrand) {
+      modelControl?.enable();
+    } else {
+      modelControl?.disable();
+      modelControl?.reset();
+    }
+  }
+
+  onSubmit(): void {
     if (this.appointmentForm.invalid) {
       return;
     }
-
-    const selectedDate: Date = new Date(this.appointmentForm.value.date);
-    const timeValue: Date = this.appointmentForm.value.time;
-
-    if (!(timeValue instanceof Date)) {
-      console.error('Hibás időformátum:', timeValue);
-      return;
-    }
   
-    selectedDate.setHours(timeValue.getHours(), timeValue.getMinutes());
+    const selectedDate: Date = new Date(this.appointmentForm.value.date);
+    const selectedTime: string = this.appointmentForm.value.time;
+    const [hourse, minutes] = selectedTime.split(':').map(Number);
+    selectedDate.setHours(hourse, minutes, 0, 0);
 
-    const appointment: Appointment = {
-      id: Math.random(),
-      userId: 1,
-      deviceId: this.appointmentForm.value.model,
-      serviceId: this.appointmentForm.value.serviceId,
+    const deviceId = this.appointmentForm.value.model;
+    const selectedDevice = this.devices.find((device) => device.id === deviceId);
+
+    const appointmentData = {
       date: selectedDate.toLocaleString('hu-HU'),
-      status: 'pending'
+      brand: this.appointmentForm.value.brand,
+      model: this.appointmentForm.value.model,
+      serviceId: this.appointmentForm.value.serviceId,
+      userId: this.loggedInUserId,
     };
 
-    console.log('Időpont foglalás adatai:', appointment);
+    if (!selectedDevice) {
+      alert('A kiválasztott eszköz nem található!');
+      return;
+    }
+
+    console.log('Kibocsátott időpont:', appointmentData);
+  
     alert('Időpontfoglalás sikeresen megtörtént!');
   }
 }

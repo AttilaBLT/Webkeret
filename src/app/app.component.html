@@ -4,17 +4,23 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-toolbar>
-        <button 
-          mat-button 
-          (click)="onToggleSidenav(sidenav)"
-          class="menu-toggle-button">
+        <button mat-button (click)="onToggleSidenav(sidenav)"class="menu-toggle-button">
           <mat-icon>menu</mat-icon>
         </button>
         <div>Elektronikai szakszervíz</div>
         <nav>
           <ul>
+            @if (isLoggedIn) {
             <li><a routerLink="/home">Főoldal</a></li>
+            }
+            
+            @if (isLoggedIn) {
             <li><a routerLink="/appointment">Időpontfoglalás</a></li>
+            }
+
+            @if (isLoggedIn) {
+            <li><a routerLink="/add-service-type">Szervíz hozzáadása</a></li>
+            }
 
             @if (isLoggedIn) {
               <li><a routerLink="/profile">Profilom</a></li>
@@ -27,7 +33,6 @@
             @if (!isLoggedIn) {
               <li><a routerLink="/login">Bejelentkezés</a></li>
             }
-
 
           </ul>
         </nav>

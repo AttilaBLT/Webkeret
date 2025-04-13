@@ -54,6 +54,7 @@ export class RegistrationComponent {
         id: Math.random(),
         name: this.registrationForm.value.name,
         email: this.registrationForm.value.email,
+        password: this.registrationForm.value.password,
         phone: this.registrationForm.value.phone,
         role: this.registrationForm.value.role,
         appointment: []

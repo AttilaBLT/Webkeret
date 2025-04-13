@@ -9,5 +9,12 @@ export const ProfileObject = [
       'completed': 8,
       'pending': 2
     }
+    // 'appointments': {
+    //   'date': '2024-04-12-12:00',
+    //   'device': 'iPhone 12',
+    //   'service-type': Kijelző csere',
+    //   'price': 15000,
+    //   'status': 'pending'
+    // }
   }
 ];

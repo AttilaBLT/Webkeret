@@ -1,0 +1,91 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Teszt Felhasználó",
+      "email": "teszt@teszt.com",
+      "password": "teszt1234",
+      "phone": "+36123456789",
+      "role": "user",
+      "appointment": [1, 2]
+    },
+    {
+      "id": 2,
+      "name": "Admin Felhasználó",
+      "email": "admin@teszt.com",
+      "password": "admin1234",
+      "phone": "+36198765432",
+      "role": "admin",
+      "appointment": [3]
+    }
+  ],
+  "appointments": [
+    {
+      "id": 1,
+      "userId": 1,
+      "deviceId": 1,
+      "serviceId": 1,
+      "date": "2025. 04. 14. 13:30:00",
+      "status": "folyamatban"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "deviceId": 2,
+      "serviceId": 2,
+      "date": "2025. 04. 15. 15:30:00",
+      "status": "befejezve"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "deviceId": 3,
+      "serviceId": 3,
+      "date": "2025. 04. 16. 16:30:00",
+      "status": "folyamatban"
+    }
+  ],
+  "devices": [
+    {
+      "id": 1,
+      "type": "Phone",
+      "brand": "Apple",
+      "model": "iPhone 12",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "type": "Laptop",
+      "brand": "Dell",
+      "model": "XPS 13",
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "type": "Tablet",
+      "brand": "Samsung",
+      "model": "Galaxy Tab S7",
+      "userId": 2
+    }
+  ],
+  "serviceTypes": [
+    {
+      "id": 1,
+      "name": "Kijelző csere",
+      "price": 15000,
+      "duration": 90
+    },
+    {
+      "id": 2,
+      "name": "Akkumulátor csere",
+      "price": 12000,
+      "duration": 60
+    },
+    {
+      "id": 3,
+      "name": "Billentyűzet javítás",
+      "price": 25000,
+      "duration": 90
+    }
+  ]
+}
