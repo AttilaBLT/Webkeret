@@ -8,13 +8,21 @@
     <span matListItemTitle>Időpontfoglalás</span>
   </a>
   @if (isLoggedIn) {
-
     <a mat-list-item routerLink="/profile" routerLinkActive="active-list-item" (click)="closeMenu()">
       <mat-icon matListItemIcon>person</mat-icon>
       <span matListItemTitle>Profilom</span>
     </a>
-  }
-  @if (isLoggedIn) {
+
+    @if (userRole === 'admin') {
+      <a mat-list-item routerLink="/add-service-type" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>build</mat-icon>
+        <span matListItemTitle>Szervíz hozzáadása</span>
+      </a>
+      <a mat-list-item routerLink="/add-device" routerLinkActive="active-list-item" (click)="closeMenu()">
+        <mat-icon matListItemIcon>add</mat-icon>
+        <span matListItemTitle>Eszköz hozzáadása</span>
+      </a>
+    }
     <a mat-list-item (click)="logout()">
       <mat-icon matListItemIcon>logout</mat-icon>
       <span matListItemTitle>Kijelentkezés</span>
@@ -26,6 +34,4 @@
       <span matListItemTitle>Bejelentkezés</span>
     </a>
   }
-
-
 </mat-nav-list>

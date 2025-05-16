@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
-import { ServiceType } from '../interfaces';
+import { Firestore, collectionData, collection, addDoc, doc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceTypeService {
+  constructor(private firestore: Firestore) {}
 
-  private serviceTypes: ServiceType[] = [
-    { id: 1, name: 'Screen Replacement', price: 50000, duration: 120 },
-    { id: 2, name: 'Battery Replacement', price: 15000, duration: 60 }
-  ];
+  getAllServiceTypes(): Observable<any[]> {
+    const ref = collection(this.firestore, 'serviceTypes');
+    return collectionData(ref, { idField: 'id' }) as Observable<any[]>;
+  }
 
-  getAllServiceTypes(): ServiceType[] {
-    return this.serviceTypes;
+  addServiceType(serviceType: any) {
+    const ref = collection(this.firestore, 'serviceTypes');
+    return addDoc(ref, serviceType);
+  }
+
+    updateServiceType(id: string, serviceType: any) {
+    const serviceTypeRef = doc(this.firestore, 'serviceTypes', id);
+    return updateDoc(serviceTypeRef, serviceType);
+  }
+
+  deleteServiceType(id: string) {
+    const serviceTypeRef = doc(this.firestore, 'serviceTypes', id);
+    return deleteDoc(serviceTypeRef);
   }
 }

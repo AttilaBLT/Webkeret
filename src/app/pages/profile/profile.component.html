@@ -60,16 +60,35 @@
 
       <div class="appointments-section">
         <h2>Időpontok</h2>
-        <mat-card *ngFor="let appointment of getUserAppointments()" class="appointment-card">
-          <mat-card-header>
-            <mat-card-title>{{ appointment.date }}</mat-card-title>
-            <mat-card-subtitle>{{ appointment.status }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Eszköz: {{ appointment.brand }} - {{ appointment.model }}</p>
-            <p>Szerviz: {{ appointment.name }} - {{ appointment.price | priceFormat }} - {{ appointment.duration | timeFormat}}</p>
-          </mat-card-content>
-        </mat-card>
+        <div *ngIf="getUserAppointments().length === 0; else appointmentsList">
+          <p>Még nincs időpontfoglalásod!</p>
+        </div>
+        <ng-template #appointmentsList>
+          <mat-card *ngFor="let appointment of getUserAppointments()" class="appointment-card" style="position: relative;">
+            <button mat-icon-button color="warn"
+                    style="position: absolute; top: 8px; right: 8px; z-index: 2;"
+                    (click)="confirmDelete(appointment)">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-card-header>
+              <mat-card-title>
+                {{ appointment.date }}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <ng-container *ngIf="appointment.status === 'folyamatban'; else normalStatus">
+                  folyamatban - {{ getRemainingTime(appointment) }}
+                </ng-container>
+                <ng-template #normalStatus>
+                  {{ appointment.status }}
+                </ng-template>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Eszköz: {{ appointment.brand }} - {{ appointment.model }}</p>
+              <p>Szerviz: {{ appointment.name }} - {{ appointment.price | priceFormat }} - {{ appointment.duration | timeFormat}}</p>
+            </mat-card-content>
+          </mat-card>
+        </ng-template>
       </div>
     </mat-card-content>
   </mat-card>

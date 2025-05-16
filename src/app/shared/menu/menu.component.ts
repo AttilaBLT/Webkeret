@@ -20,11 +20,14 @@ export class MenuComponent implements OnInit, AfterViewInit {
   @Input() isLoggedIn: boolean = false;
   @Output() logoutEvent = new EventEmitter<void>();
 
+  userRole: string | null = null;
+
   constructor() {
     console.log("constructor called");
   }
 
   ngOnInit(): void {
+    this.userRole = localStorage.getItem('userRole');
     console.log("ngOnInit called");
   }
 

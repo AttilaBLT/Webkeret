@@ -1,19 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Device } from '../interfaces';
+import { Firestore, collectionData, collection, addDoc, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class DeviceService {
+  constructor(private firestore: Firestore) {}
 
-  private devices: Device[] = [
-    { id: 1, type: 'Phone', brand: 'iPhone', model: 'iPhone 13', userId: 1 },
-    { id: 2, type: 'Phone', brand: 'iPhone', model: 'iPhone 12', userId: 1 },
-    { id: 3, type: 'Phone', brand: 'Samsung', model: 'Galaxy S21', userId: 1 },
-    { id: 4, type: 'Phone', brand: 'Samsung', model: 'Galaxy Note 20', userId: 1 },
-  ];
-
-  getAllDevices(): Device[] {
-    return this.devices;
+  getAllDevices(): Observable<any[]> {
+    const ref = collection(this.firestore, 'devices');
+    return collectionData(ref, { idField: 'id' }) as Observable<any[]>;
   }
+
+  addDevice(device: any) {
+    const ref = collection(this.firestore, 'devices');
+    return addDoc(ref, device);
+  }
+
+  updateDevice(id: string, device: any) {
+  const deviceRef = doc(this.firestore, 'devices', id);
+  return updateDoc(deviceRef, device);
+}
+
+deleteDevice(id: string) {
+  const deviceRef = doc(this.firestore, 'devices', id);
+  return deleteDoc(deviceRef);
+}
 }

@@ -53,7 +53,7 @@ export class AppointmentComponent implements OnInit {
   appointments: Appointment[] = [];
   phoneBrands: string[] = [];
   filteredModels: Device[] = [];
-  loggedInUserId: number = 0;
+  loggedInUserId: string = '';
   selectedBrand: string | null = null;
   availableTimes: string[] = [];
 
@@ -74,7 +74,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loggedInUserId = Number(localStorage.getItem('loggedInUserId'));
+    this.loggedInUserId = localStorage.getItem('loggedInUserId') || '';
     this.initializeForm();
     this.loadData();
   }
@@ -103,15 +103,20 @@ export class AppointmentComponent implements OnInit {
   }
 
   loadData(): void {
-    this.http.get<any>('assets/dummy-data.json').subscribe({
-      next: (data) => {
-        this.devices = data.devices;
-        this.serviceTypes = data.serviceTypes;
-        this.appointments = data.appointments;
+    this.deviceService.getAllDevices().subscribe({
+      next: (devices) => {
+        this.devices = devices;
         this.phoneBrands = [...new Set(this.devices.map((device) => device.brand))];
-      },
-      error: (err) => {
-        console.error('Hiba az adatok betöltésekor:', err);
+      }
+    });
+    this.serviceTypeService.getAllServiceTypes().subscribe({
+      next: (serviceTypes) => {
+        this.serviceTypes = serviceTypes;
+      }
+    });
+    this.appointmentService.getAllAppointments().subscribe({
+      next: (appointments) => {
+        this.appointments = appointments;
       }
     });
   }
@@ -138,33 +143,37 @@ export class AppointmentComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.appointmentForm.invalid) {
+      if (this.appointmentForm.invalid) {
       return;
     }
-  
+
     const selectedDate: Date = new Date(this.appointmentForm.value.date);
     const selectedTime: string = this.appointmentForm.value.time;
-    const [hourse, minutes] = selectedTime.split(':').map(Number);
-    selectedDate.setHours(hourse, minutes, 0, 0);
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    selectedDate.setHours(hours, minutes, 0, 0);
 
     const deviceId = this.appointmentForm.value.model;
     const selectedDevice = this.devices.find((device) => device.id === deviceId);
-
-    const appointmentData = {
-      date: selectedDate.toLocaleString('hu-HU'),
-      brand: this.appointmentForm.value.brand,
-      model: this.appointmentForm.value.model,
-      serviceId: this.appointmentForm.value.serviceId,
-      userId: this.loggedInUserId,
-    };
 
     if (!selectedDevice) {
       alert('A kiválasztott eszköz nem található!');
       return;
     }
 
-    console.log('Kibocsátott időpont:', appointmentData);
-  
-    alert('Időpontfoglalás sikeresen megtörtént!');
+    const appointmentData = {
+      date: selectedDate, // Firestore-ba mehet Date vagy Timestamp
+      deviceId: selectedDevice.id,
+      serviceId: this.appointmentForm.value.serviceId,
+      userId: this.loggedInUserId,
+      status: 'folyamatban'
+    };
+
+    this.appointmentService.addAppointment(appointmentData).then(() => {
+      alert('Időpontfoglalás sikeresen megtörtént!');
+      this.appointmentForm.reset();
+    }).catch(err => {
+      alert('Hiba történt a foglalás során!');
+      console.error(err);
+    });
   }
 }
