@@ -1,4 +1,7 @@
 # BEJELENTKEZÉSI ADATOK:
+
+    Weboldal link: https://webkeret-idopontfoglalas.web.app/login
+
     Email: admin@teszt.com
     Jelszó: admin1234 
 
